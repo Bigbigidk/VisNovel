@@ -7,47 +7,59 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     //these lists have all the dialogue for each phase of questions
+
     public List<string> phaseOneDialogue;
     public List<string> phaseTwoDialogue;
     public List<string> phaseThreeDialogue;
     public List<string> phaseFourDialogue;
 
     //holds the phase we're currently going through
+    // List<string> currentDialogue;
+
     List<string> currentDialogue;
 
     //tracks the current phase and the line we're on in that phase
+    // int phaseIndex = 0;
+    //int dialogueIndex = 0;
+
     int phaseIndex = 0;
     int dialogueIndex = 0;
 
     //game object for all buttons
+    //public GameObject choiceOne;
+    // public GameObject choiceTwo;
+    //public GameObject nextButton;
+
     public GameObject choiceOne;
     public GameObject choiceTwo;
     public GameObject nextButton;
 
     //text component that is showing the dialogue
+    //public TMP_Text dialogueBox;
+
     public TMP_Text dialogueBox;
 
-    //"score" for how much of a clown u r
-    int clownyLove = 0;
+    //"score" for getting out of pound
+    int escape = 0;
 
     //text for results of the quiz
-    public string clownMessage;
-    public string notAClownMessage;
-
-    //animator components for each face
-    public Animator faceyAnim;
-    public Animator clownyAnim;
+    public string escaped;
+    public string notEscaped;
 
     // Start is called before the first frame update
     void Start()
     {
         //turn off the choice buttons
+        //  choiceOne.SetActive(false);
+        // choiceTwo.SetActive(false);
+
         choiceOne.SetActive(false);
         choiceTwo.SetActive(false);
+
+
         //start the dialogue
         currentDialogue = phaseOneDialogue;
         dialogueBox.text = currentDialogue[dialogueIndex];
-        faceyAnim.SetTrigger("isTalking");
     }
 
     void SetDialogueText()
@@ -91,16 +103,16 @@ public class GameManager : MonoBehaviour
         choiceTwo.SetActive(true);
     }
 
-    public void FaceyChoice()
+    public void NoEscapeChoice()
     {
         //if we press "no", just go to the next phase of questions
         GoToNextPhase();
     }
 
-    public void ClownyChoice()
+    public void EscapeChoice()
     {
-        //if we press "yes", increase clowny's score and then go to the next phase
-        clownyLove++;
+        //if we press "yes", increase escape chance and go to next phase
+        escape++;
         GoToNextPhase();
     }
 
@@ -117,7 +129,6 @@ public class GameManager : MonoBehaviour
         switch (phaseIndex)
         {
             case 0:
-                faceyAnim.SetTrigger("isTalking");
                 currentDialogue = phaseTwoDialogue;
                 phaseIndex = 1;
                 break;
@@ -126,12 +137,10 @@ public class GameManager : MonoBehaviour
                 phaseIndex = 2;
                 break;
             case 2:
-                clownyAnim.SetTrigger("isTalking");
                 currentDialogue = phaseFourDialogue;
                 phaseIndex = 3;
                 break;
             case 3:
-                faceyAnim.SetTrigger("isTalking");
                 phaseIndex = 4;
                 GiveResults();
                 break;
@@ -139,18 +148,19 @@ public class GameManager : MonoBehaviour
         SetDialogueText();
     }
 
+    
+
     void GiveResults()
     {
         //if the clown score is higher than 2, then u r a clown
-        if (clownyLove > 2)
+        if (escape > 2)
         {
-            dialogueBox.text = clownMessage;
+            dialogueBox.text = escaped;
         }
         else
         {
-            dialogueBox.text = notAClownMessage;
+            dialogueBox.text = notEscaped;
         }
     }
 
 }
-
